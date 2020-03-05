@@ -67,4 +67,23 @@ public class Rocket : MonoBehaviour
         rigidbody.freezeRotation = false; //resume physics control of rotation
 
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        switch (collision.gameObject.tag)
+        {
+            case "Friendly":
+                print("Ok!"); // TODO: remove
+                break;
+            case "Finish":
+                print("Well done!"); // TODO: remove
+                // start next level
+                break;
+            default:
+                print("Boom!"); // TODO: remove
+                // kill player
+                break;
+        }
+
+    }
 }

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rocket : MonoBehaviour
 {
@@ -70,18 +68,24 @@ public class Rocket : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        int nextScene = currentScene + 1;
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
-                print("Ok!"); // TODO: remove
+                // do nothing
                 break;
             case "Finish":
-                print("Well done!"); // TODO: remove
                 // start next level
+                print("Finish hit");
+                // TODO add check if next level exists
+                SceneManager.LoadScene(nextScene);
                 break;
             default:
-                print("Boom!"); // TODO: remove
                 // kill player
+                print("Dead");
+                SceneManager.LoadScene(currentScene);
                 break;
         }
 

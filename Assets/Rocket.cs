@@ -11,6 +11,9 @@ public class Rocket : MonoBehaviour
     Rigidbody rigidbody;
     AudioSource audioSource;
 
+    enum State { Alive, Dying, Transcending };
+    State state = State.Alive;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +24,17 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // allow controls when alive
+        if (state.Equals(State.Alive)) 
+        { 
         Thrust();
         Rotate();
-    
+        } 
+        // stop rocket sound on death or winning
+        else
+        {
+            audioSource.Stop();
+        }
     }
 
     private void Thrust()
@@ -68,8 +79,8 @@ public class Rocket : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        int currentScene = SceneManager.GetActiveScene().buildIndex;
-        int nextScene = currentScene + 1;
+        // do nothing if dead
+        if (!state.Equals(State.Alive)) { return; }
 
         switch (collision.gameObject.tag)
         {
@@ -79,15 +90,30 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 // start next level
                 print("Finish hit");
-                // TODO add check if next level exists
-                SceneManager.LoadScene(nextScene);
+                state = State.Transcending;
+                Invoke("LoadNextLevel", 2f); // TODO parameterise time
                 break;
             default:
                 // kill player
                 print("Dead");
-                SceneManager.LoadScene(currentScene);
+                state = State.Dying;
+                Invoke("ReloadCurrentLevel", 1f); // TODO parameterise time
                 break;
         }
 
+    }
+
+    private void ReloadCurrentLevel()
+    {
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+
+        SceneManager.LoadScene(currentScene);
+    }
+
+    private void LoadNextLevel()
+    {
+        int nextScene = SceneManager.GetActiveScene().buildIndex + 1;
+        // TODO add check if next level exists
+        SceneManager.LoadScene(nextScene);
     }
 }

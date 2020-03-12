@@ -5,8 +5,11 @@ public class Rocket : MonoBehaviour
 {
     // Increases the speed of rocket's rotation (the higher, the faster)
     [SerializeField] float rcsThrust = 100f;
-
     [SerializeField] float mainThrust = 100f;
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip onDeath;
+    [SerializeField] AudioClip onWin;
+
 
     Rigidbody rigidbody;
     AudioSource audioSource;
@@ -27,30 +30,16 @@ public class Rocket : MonoBehaviour
         // allow controls when alive
         if (state.Equals(State.Alive)) 
         { 
-        Thrust();
-        Rotate();
+        RespondToThrustInput();
+        RespondToRotateInput();
         } 
-        // stop rocket sound on death or winning
-        else
-        {
-            audioSource.Stop();
-        }
     }
 
-    private void Thrust()
+    private void RespondToThrustInput()
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            float thrustThisFrame = mainThrust * Time.deltaTime;
-
-            //can thrust while rotating
-            rigidbody.AddRelativeForce(Vector3.up * thrustThisFrame);
-
-            if (!audioSource.isPlaying)
-            {
-                audioSource.Play();
-            }
-
+            ApplyThrust();
         }
         else
         {
@@ -58,7 +47,20 @@ public class Rocket : MonoBehaviour
         }
     }
 
-    private void Rotate()
+    private void ApplyThrust()
+    {
+        float thrustThisFrame = mainThrust * Time.deltaTime;
+
+        //can thrust while rotating
+        rigidbody.AddRelativeForce(Vector3.up * thrustThisFrame);
+
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
+    }
+
+    private void RespondToRotateInput()
     {
         rigidbody.freezeRotation = true; // take manual control of rotation
 
@@ -90,17 +92,36 @@ public class Rocket : MonoBehaviour
             case "Finish":
                 // start next level
                 print("Finish hit");
-                state = State.Transcending;
-                Invoke("LoadNextLevel", 2f); // TODO parameterise time
+                OnWin();
+                
                 break;
             default:
                 // kill player
                 print("Dead");
-                state = State.Dying;
-                Invoke("ReloadCurrentLevel", 1f); // TODO parameterise time
+                OnDeath();
                 break;
         }
 
+    }
+
+    private void OnWin()
+    {
+        state = State.Transcending;
+
+        Invoke("LoadNextLevel", 2.5f);
+        
+        audioSource.Stop();
+        audioSource.PlayOneShot(onWin);
+    }
+
+    private void OnDeath()
+    {
+        state = State.Dying;
+
+        Invoke("ReloadCurrentLevel", 1f);
+        
+        audioSource.Stop();
+        audioSource.PlayOneShot(onDeath);
     }
 
     private void ReloadCurrentLevel()

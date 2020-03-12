@@ -818,3 +818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rcsThrust: 100
   mainThrust: 900
+  mainEngine: {fileID: 8300000, guid: 2e843576b7a0aeb47b35400220d3148d, type: 3}
+  onDeath: {fileID: 8300000, guid: 919d41be13d780e4fbd11691b7c67f97, type: 3}
+  onLoad: {fileID: 8300000, guid: 0f09959a82245a94e93c8d6ebb71f162, type: 3}
+  onWin: {fileID: 8300000, guid: 62474ad527e0db840ae041544b36e805, type: 3}

@@ -6,6 +6,10 @@ public class Rocket : MonoBehaviour
     // Increases the speed of rocket's rotation (the higher, the faster)
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 100f;
+
+    [SerializeField] float levelLoadDelay = 2.5f;
+    [SerializeField] float levelReloadDelay = 1f;
+
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip onDeath;
     [SerializeField] AudioClip onWin;
@@ -113,7 +117,7 @@ public class Rocket : MonoBehaviour
     {
         state = State.Transcending;
 
-        Invoke("LoadNextLevel", 2.5f);
+        Invoke("LoadNextLevel", levelLoadDelay);
         
         audioSource.Stop();
         audioSource.PlayOneShot(onWin);
@@ -126,7 +130,7 @@ public class Rocket : MonoBehaviour
     {
         state = State.Dying;
 
-        Invoke("ReloadCurrentLevel", 1f);
+        Invoke("ReloadCurrentLevel", levelReloadDelay);
         
         audioSource.Stop();
         audioSource.PlayOneShot(onDeath);

@@ -819,10 +819,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d88cbd8ca98931045bc571119ae39e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rcsThrust: 100
-  mainThrust: 900
+  rcsThrust: 300
+  mainThrust: 1500
+  levelLoadDelay: 2.5
+  levelReloadDelay: 1
   mainEngine: {fileID: 8300000, guid: 2e843576b7a0aeb47b35400220d3148d, type: 3}
-  onDeath: {fileID: 8300000, guid: 919d41be13d780e4fbd11691b7c67f97, type: 3}
+  onDeath: {fileID: 8300000, guid: 306131783ecf02f4e923f23e362bc340, type: 3}
   onWin: {fileID: 8300000, guid: 62474ad527e0db840ae041544b36e805, type: 3}
   thrustParticles: {fileID: 198100718987873245}
   deathParticles: {fileID: 198204747447655307}
